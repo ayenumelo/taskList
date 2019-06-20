@@ -33,14 +33,32 @@ form.addEventListener('submit', (e) => {
     e.preventDefault();
 })
 
-
+//Remove Li item
 taskList.addEventListener('click', (e) => {
     if (e.target.parentElement.classList.contains('delete-item')) {
         if (confirm('Are you sure?')) {
             e.target.parentElement.parentElement.remove();
+
+            removeFromLocalStorage(e.target.parentElement.parentElement);
         }
     }
 })
+
+//Remove from Ls
+function removeFromLocalStorage(taskItem) {
+    let tasks;
+    if (localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks'))
+    }
+    tasks.forEach((task, index) => {
+        if (taskItem.textContent === task) {
+            tasks.splice(index, 1)
+        }
+    })
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
 
 clearBtn.addEventListener('click', () => {
     while (taskList.firstChild) {
@@ -58,6 +76,31 @@ filter.addEventListener('keyup', (e) => {
             task.style.display = 'none'
         }
     });
+})
+document.addEventListener('DOMContentLoaded', (e) => {
+    let tasks;
+    if (localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks'))
+    }
+
+    tasks.forEach((task) => {
+        // Create new link element
+        const link = document.createElement('a');
+        // Create li element
+        const li = document.createElement('li');
+        // Add class
+        link.className = 'delete-item secondary-content'
+        li.className = 'collection-item';
+        // Add icon html
+        link.innerHTML = '<i class="fa fa-remove"></i>';
+        // Create text node and append to li
+        li.appendChild(document.createTextNode(task))
+        li.appendChild(link);
+        // Append li to ul
+        taskList.appendChild(li)
+    })
 })
 
 function storeInLocalStorage(task) {
