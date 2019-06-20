@@ -23,6 +23,10 @@ form.addEventListener('submit', (e) => {
         li.appendChild(link);
         // Append li to ul
         taskList.appendChild(li)
+
+        //Store In Local Storage
+        storeInLocalStorage(taskInput.value);
+
         // Clear input
         taskInput.value = '';
     }
@@ -44,14 +48,25 @@ clearBtn.addEventListener('click', () => {
     }
 })
 
-filter.addEventListener('keyup', (e) =>{
-  const text = e.target.value.toLowerCase();
-  document.querySelectorAll('.collection-item').forEach((task) => {
-         const item = task.firstChild.textContent;
-         if (item.toLowerCase().indexOf(text) != -1) {
-             task.style.display = 'block'
-         } else {
-             task.style.display = 'none'
-         }
-     });
+filter.addEventListener('keyup', (e) => {
+    const text = e.target.value.toLowerCase();
+    document.querySelectorAll('.collection-item').forEach((task) => {
+        const item = task.firstChild.textContent;
+        if (item.toLowerCase().indexOf(text) != -1) {
+            task.style.display = 'block'
+        } else {
+            task.style.display = 'none'
+        }
+    });
 })
+
+function storeInLocalStorage(task) {
+    let tasks;
+    if (localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        tasks = JSON.parse(localStorage.getItem('tasks'))
+    }
+    tasks.push(task)
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+}
