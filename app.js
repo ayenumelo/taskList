@@ -1,7 +1,7 @@
 //All of my varaibles
 const form = document.querySelector('#task-form');
 const taskList = document.querySelector('.collection');
-const clearBtn = document.querySelector('clear-tasks');
+const clearBtn = document.querySelector('.clear-tasks');
 const filter = document.querySelector('#filter');
 const taskInput = document.querySelector('#task')
 
@@ -27,4 +27,19 @@ form.addEventListener('submit', (e) => {
         taskInput.value = '';
     }
     e.preventDefault();
+})
+
+
+taskList.addEventListener('click', (e) => {
+    if (e.target.parentElement.classList.contains('delete-item')) {
+        if (confirm('Are you sure?')) {
+            e.target.parentElement.parentElement.remove();
+        }
+    }
+})
+
+clearBtn.addEventListener('click', () => {
+    while (taskList.firstChild) {
+        taskList.removeChild(taskList.firstChild)
+    }
 })
